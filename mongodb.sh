@@ -7,11 +7,12 @@ N="\e[0m"
 B="\e[1m" #Bold
 N1="\e[22m" #No Bold
 
-roboshop_logsogs="/var/log/shell-roboshop"
+
+mkdir -p $roboshop_logs
+roboshop_logs="/var/log/shell-roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 Logs_file="$roboshop_logs/$SCRIPT_NAME.log"
 export Logs_file
-mkdir -p $roboshop_logs
 
 USERID=$(id -u)
 
@@ -37,4 +38,17 @@ do
 dnf list installed $i &>>install.log
 VALIDATE $? "$i" "Packages"
 done
+
+cp mongo.repo /etc/yum.repos.d/mongo.repo
+VALIDATE $? "Adding mongo repo"
+
+dnf install mongodb-org -y &>>roboshop_logs
+VALIDATE $? "Installing MongoDB"
+
+systemctl enable mongod &>>roboshop_logs
+VALIDATE $? "Enabling MongoDB"
+
+systemctl start mongod &>>roboshop_logs
+VALIDATE $? "Starting MongoDB"
+
 
