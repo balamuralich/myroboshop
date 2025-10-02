@@ -7,11 +7,11 @@ N="\e[0m"
 B="\e[1m" #Bold
 N1="\e[22m" #No Bold
 
-roboshop_logs="/var/log/shell-roboshop"
+LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-Logs_file="$roboshop_logs/$SCRIPT_NAME.log"
-export Logs_file
+Logs_file="$LOGS_FOLDER/$SCRIPT_NAME.log"
 
+mkdir -p $LOGS_FOLDER
 
 USERID=$(id -u)
 
@@ -20,36 +20,23 @@ if [ $USERID -ne 0 ]; then
     exit 1
 fi
 
-mkdir -p $roboshop_logs
-
 VALIDATE(){
             if [ $1 -ne 0 ]; then
-                echo -e "$B$G $2 $N$N1 $3 installation $G $B SUCCESS $N1 $N"
-                dnf install $i -y &>>Logs_file
-                echo -e "$i installation $G $B SUCCESS $N1 $N"
+                echo -e "$2 .... $R FAILURE $N" | tee -a $Logs_file
+                exit 1
             else
-                echo -e "$2 already installed hence $Y SKIPPING $N"
+                echo -e "$2 .... $G SUCCRESS $N" | tee -a $Logs_file
             fi
 }
 
-# if we need to take i value from a list we need to create a list and re-place @ with that list name.
-
-for i in $@
-do
-dnf list installed $i &>>install.log
-VALIDATE $? "$i" "Packages"
-done
-
 cp mongo.repo /etc/yum.repos.d/mongo.repo
-VALIDATE $? "Adding mongo repo"
+VALIDATE $? "Adding Mongo repo"
 
-dnf install mongodb-org -y
+dnf install mongodb-org -y &>>$Logs_file
 VALIDATE $? "Installing MongoDB"
 
-systemctl enable mongod &>>roboshop_logs
+systemctl enable mongod &>>$Logs_file
 VALIDATE $? "Enabling MongoDB"
 
-systemctl start mongod &>>roboshop_logs
+systemctl start mongod &>>$Logs_file
 VALIDATE $? "Starting MongoDB"
-
-
