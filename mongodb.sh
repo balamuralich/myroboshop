@@ -43,7 +43,7 @@ done
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Adding mongo repo"
 
-dnf install mongodb-org -y &>>roboshop_logs
+dnf install mongodb-org -y
 VALIDATE $? "Installing MongoDB"
 
 systemctl enable mongod &>>roboshop_logs
