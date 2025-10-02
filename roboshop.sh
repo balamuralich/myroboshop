@@ -1,11 +1,13 @@
 #!/bin/bash
 
+# to create EC2 Instance from AWS CLI and get the instance ID, Public IP, Private IP and Record.
+
 AMI_ID="ami-09c813fb71547fc4f"
 SG_ID="sg-03249e1d40b5de776"
 ZONE_ID="Z0881346IGZYG6U9FIPG"
 DOMAIN_NAME="jyobala.space"
 
-for INSTANCE in $@
+for INSTANCE in $@ #mongoDB redis mysql, we can give anyone dynamically
 
 do
     INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI_ID --instance-type t3.micro --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE}]" --query "Instances[0].InstanceId" --output text)

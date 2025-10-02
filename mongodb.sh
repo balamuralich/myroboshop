@@ -29,6 +29,7 @@ VALIDATE(){
             fi
 }
 
+# copy from mongo.repo to setup the MongoDB repo file, without this setup mongodb-org would not be installed.
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Adding Mongo repo"
 
@@ -40,3 +41,9 @@ VALIDATE $? "Enabling MongoDB"
 
 systemctl start mongod &>>$Logs_file
 VALIDATE $? "Starting MongoDB"
+
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
+VALIDATE $? "Allowing remote connections to MongoDB"
+
+systemctl restart mongod
+VALIDATE $? "Restarted MongoDB"
