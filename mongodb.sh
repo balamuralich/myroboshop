@@ -7,12 +7,11 @@ N="\e[0m"
 B="\e[1m" #Bold
 N1="\e[22m" #No Bold
 
-
-mkdir -p $roboshop_logs
 roboshop_logs="/var/log/shell-roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 Logs_file="$roboshop_logs/$SCRIPT_NAME.log"
 export Logs_file
+
 
 USERID=$(id -u)
 
@@ -20,6 +19,8 @@ if [ $USERID -ne 0 ]; then
     echo -e "$R $B ERROR $N1 $N - Please run with root privileges"
     exit 1
 fi
+
+mkdir -p $roboshop_logs
 
 VALIDATE(){
             if [ $1 -ne 0 ]; then
