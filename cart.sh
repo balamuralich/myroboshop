@@ -11,7 +11,7 @@ N1="\e[22m" #To stop Bold
 
 LOGS_FOLDER="/var/log/shell-roboshop"       #Directory to store logs.
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)     #Extracts the script name (without extension).
-SCRIPT_DIR=$($PWD)                             #Current working directory.
+SCRIPT_DIR=$PWD                             #Current working directory.
 MONGODB_HOST=mongodb.jyobala.space          #MongoDB hostname.
 Logs_file="$LOGS_FOLDER/$SCRIPT_NAME.log"   #Full path to the log file for this script.
 Start_time=$(date +%s)
