@@ -52,7 +52,7 @@ VALIDATE $? "Allowing remote connections to redis"
 systemctl enable redis &>>Logs_file
 VALIDATE $? "Enableing Systemctl"
 
-systemctl start redis
+systemctl restart redis
 VALIDATE $? "Starting Systemctl"
 
 End_time=$(date +%s)
