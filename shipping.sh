@@ -48,7 +48,7 @@ else
     echo -e "User already exist .... hence, $Y SKIPPING $N"
 fi
 
-mkdir /app
+mkdir -p /app
 
 curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>Logs_file
 VALIDATE $? "Downloading Shipping Application"
@@ -67,11 +67,12 @@ VALIDATE $? "Maven Package cleaning"
 
 mv target/shipping-1.0.jar shipping.jar &>>Logs_file
 
+cp $SCRIPT_DIR/shipping_service /etc/systemd/system/user.service 
+
 systemctl daemon-reload &>>Logs_file
 VALIDATE $? "Reloading Daemon"
 
-systemctl start shipping &>>Logs_file
-VALIDATE $? "Start Shipping"
+systemctl enable shipping 
 
 dnf install mysql -y &>>Logs_file
 VALIDATE $? "Installing MySQL"
