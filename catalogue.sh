@@ -59,13 +59,14 @@ VALIDATE $? "Changing to App Directory"
 
 rm -rf /app/*
 VALIDATE $? "Removing existing code"
+
 unzip /tmp/catalogue.zip &>>Logs_file
 VALIDATE $? "Unzip Catalogue"
 
 npm install &>>Logs_file
 VALIDATE $? "Installing Dependencies"
 
-cp $SCRIPT_DIR/catalogue_service /etc/systemd/system/catalogue_service
+cp $SCRIPT_DIR/catalogue_service /etc/systemd/system/catalogue.service
 VALIDATE $? "Copy systemctl service"
 
 systemctl daemon-reload
