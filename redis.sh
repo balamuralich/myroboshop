@@ -57,4 +57,4 @@ VALIDATE $? "Starting Redis Service"
 
 End_time=$(date +%s)
 Total_time=$(($End_time - $Start_time))
-echo "Script excuted in $Y $Total_time $N Seconds"
+echo -e "Script excuted in $Y $Total_time $N Seconds"
