@@ -50,11 +50,11 @@ sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc
 VALIDATE $? "Allowing remote connections to redis"
 
 systemctl enable redis &>>Logs_file
-VALIDATE $? "Enableing Systemctl"
+VALIDATE $? "Enabling Systemctl"
 
 systemctl start redis
-VALIDATE $? "Starting Systemctl"
+VALIDATE $? "Starting Redis Service"
 
 End_time=$(date +%s)
 Total_time=$(($End_time - $Start_time))
-echo "Script excuted in $Y $Total_time $N Seconds.
+echo "Script excuted in $Y $Total_time $N Seconds"
