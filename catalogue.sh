@@ -7,6 +7,7 @@ N="\e[0m"
 B="\e[1m" #Bold
 N1="\e[22m" #No Bold
 
+TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 SCRIPT_DIR=$PWD
@@ -21,6 +22,8 @@ if [ $USERID -ne 0 ]; then
     echo -e "$R $B ERROR $N1 $N - Please run with root privileges"
     exit 1
 fi
+
+$TIMESTAMP
 
 VALIDATE(){
             if [ $1 -ne 0 ]; then
