@@ -14,6 +14,7 @@ SCRIPT_NAME=$(echo $0 | cut -d "." -f1)     #Extracts the script name (without e
 SCRIPT_DIR=$PWD                             #Current working directory.
 MONGODB_HOST=mongodb.jyobala.space          #MongoDB hostname.
 Logs_file="$LOGS_FOLDER/$SCRIPT_NAME.log"   #Full path to the log file for this script.
+Start_time=$(date +%s)
 
 mkdir -p $LOGS_FOLDER                       #Ensures the log directory exists.
 
