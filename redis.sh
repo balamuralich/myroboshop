@@ -46,13 +46,13 @@ VALIDATE $? "Enabling redis:7"
 dnf install redis -y &>>Logs_file
 VALIDATE $? "Installing redis"
 
-sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c proteched-mode no' /etc/redis/redis.conf
+sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf
 VALIDATE $? "Allowing remote connections to redis"
 
 systemctl enable redis &>>Logs_file
 VALIDATE $? "Enableing Systemctl"
 
-systemctl restart redis
+systemctl start redis
 VALIDATE $? "Starting Systemctl"
 
 End_time=$(date +%s)
