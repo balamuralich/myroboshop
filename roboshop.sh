@@ -8,7 +8,6 @@ ZONE_ID="Z0881346IGZYG6U9FIPG"
 DOMAIN_NAME="jyobala.space"
 
 for INSTANCE in $@ #mongoDB redis mysql, we can give anyone dynamically
-
 do
     INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI_ID --instance-type t3.micro --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE}]" --query "Instances[0].InstanceId" --output text)
 
@@ -20,7 +19,6 @@ do
         RECORD_NAME="$DOMAIN_NAME"
     fi
         echo "$INSTANCE; $IP"
-
         aws route53 change-resource-record-sets \
         --hosted-zone-id $ZONE_ID \
         --change-batch '
