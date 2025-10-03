@@ -76,7 +76,7 @@ cp $SCRIPT_DIR/cart_service /etc/systemd/system/cart.service  #Copies the servic
 VALIDATE $? "Copy systemctl service"
 
 systemctl daemon-reload                             #Reloads systemd to recognize the new service.
-systemctl enable user                          #Enables the service to start on boot.
+systemctl enable cart                          #Enables the service to start on boot.
 VALIDATE $? "Enabling User"
 
 systemctl restart cart                        #Restarts the service to apply changes.
