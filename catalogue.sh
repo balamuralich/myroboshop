@@ -40,12 +40,12 @@ VALIDATE $? "Enabling NodeJS:20"
 dnf install nodejs -y &>>Logs_file
 VALIDATE $? "Installing NodeJS"
 
-id roboshop
+id roboshop &>>Logs_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>Logs_file
     VALIDATE $? "Creating System User"
 else
-    echo "User already exist .... hence, $Y SKIPPING $N"
+    echo -e "User already exist .... hence, $Y SKIPPING $N"
 fi
 
 mkdir -p /app
@@ -57,6 +57,8 @@ VALIDATE $? "Downloading catalogue Application"
 cd /app
 VALIDATE $? "Changing to App Directory"
 
+rm -rf /app/*
+VALIDATE $? "Removing existing code"
 unzip /tmp/catalogue.zip &>>Logs_file
 VALIDATE $? "Unzip Catalogue"
 
