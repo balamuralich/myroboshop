@@ -11,7 +11,7 @@ LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 Logs_file="$LOGS_FOLDER/$SCRIPT_NAME.log"
 Start_time=$(date +%s)
-SCRIPT_DIR=$($PWD)
+SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER
 
@@ -34,19 +34,19 @@ VALIDATE(){
 cp $SCRIPT_DIR/rabbimq.repo /etc/yum.repos.d/rabbitmq.repo
 VALIDATE $? "Adding RabbitMQ repo"
 
-dnf install rabbitmq-server -y
+dnf install rabbitmq-server -y &>>Logs_file
 VALIDATE $? "Installing RabbitMQ"
 
-systemctl enable rabbitmq-server
+systemctl enable rabbitmq-server &>>Logs_file
 VALIDATE $? "Enabling RabbitMQ"
 
-systemctl start rabbitmq-server
+systemctl start rabbitmq-server &>>Logs_file
 VALIDATE $? "Starting RabbitMQ"
 
-rabbitmqctl add_user roboshop roboshop123
+rabbitmqctl add_user roboshop roboshop123 &>>Logs_file
 VALIDATE $? "Adding roboshop User"
 
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>Logs_file
 VALIDATE $? "Setting up permissions"
 
 End_time=$(date +%s)
