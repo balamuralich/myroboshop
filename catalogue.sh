@@ -9,6 +9,7 @@ N1="\e[22m" #No Bold
 
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
+SCRIPT_DIR=$pwd
 MONGODB_HOST=mongodb.jyobala.space
 Logs_file="$LOGS_FOLDER/$SCRIPT_NAME.log"
 
@@ -39,10 +40,15 @@ VALIDATE $? "Enabling NodeJS:20"
 dnf install nodejs -y &>>Logs_file
 VALIDATE $? "Installing NodeJS"
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>Logs_file
-VALIDATE $? "Creating System User"
+id roboshop
+if [ $? -ne 0 ]; then
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>Logs_file
+    VALIDATE $? "Creating System User"
+else
+    echo "User already exist .... hence, $Y SKIPPING $N"
+fi
 
-mkdir /app
+mkdir -p /app
 VALIDATE $? "Creating app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>Logs_file
@@ -57,14 +63,14 @@ VALIDATE $? "Unzip Catalogue"
 npm install &>>Logs_file
 VALIDATE $? "Installing Dependencies"
 
-cp catalogue_service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR/etc/systemd/system/catalogue.service
 VALIDATE $? "Copy systemctl service"
 
 systemctl daemon-reload
 systemctl enable catalogue &>>Logs_file
 VALIDATE $? "Enabling Catalogue"
 
-cp mongo.repo/etc/yum.repos.d/mongo.repo
+cp $SCRIPT_DIR/etc/yum.repos.d/mongo.repo
 VALIDATE $? "Copy Mongo repo"
 
 dnf install mongodb-mongosh -y &>>Logs_file
