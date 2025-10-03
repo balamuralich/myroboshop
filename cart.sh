@@ -58,7 +58,7 @@ mkdir -p /app                                       #Creates /app directory if i
 VALIDATE $? "Creating app directory"
 
 curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>Logs_file  #Downloads the catalogue app zip file.
-VALIDATE $? "Downloading user Application"
+VALIDATE $? "Downloading cart Application"
 
 cd /app                                             #Navigates to /app.
 VALIDATE $? "Changing to App Directory"
@@ -72,7 +72,7 @@ VALIDATE $? "Unzip Cart"
 npm install &>>Logs_file                            #Installs required Node.js packages from package.json.
 VALIDATE $? "Installing Dependencies"
 
-cp $SCRIPT_DIR/cart_service /etc/systemd/system/cart.service &>>Logs_file #Copies the service file to systemd.
+cp $SCRIPT_DIR/cart.service /etc/systemd/system/cart.service &>>Logs_file #Copies the service file to systemd.
 VALIDATE $? "Copy systemctl service"
 
 systemctl daemon-reload                             #Reloads systemd to recognize the new service.
