@@ -73,7 +73,7 @@ systemctl daemon-reload
 systemctl enable catalogue
 VALIDATE $? "Enabling Catalogue"
 
-cp /home/ec2-user/myroboshop/mango.repo/etc/yum.repos.d/mongo.repo
+cp $SCRIPT_DIR/mongo.repo/etc/yum.repos.d/mongo.repo
 VALIDATE $? "Copy Mongo repo"
 
 dnf install mongodb-mongosh -y &>>Logs_file
