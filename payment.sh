@@ -38,7 +38,7 @@ VALIDATE(){
             fi
 }
 
-dnf install maven -y &>>Logs_file
+dnf install python3 gcc python3-devel -y &>>Logs_file
 
 id roboshop &>>Logs_file
 if [ $? -ne 0 ]; then
@@ -50,8 +50,8 @@ fi
 
 mkdir -p /app
 
-curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>Logs_file
-VALIDATE $? "Downloading Shipping Application"
+curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>Logs_file
+VALIDATE $? "Downloading Payment Application"
 
 cd /app
 VALIDATE $? "Creating App Directory"
@@ -59,37 +59,19 @@ VALIDATE $? "Creating App Directory"
 rm -rf /app/*
 VALIDATE $? "Removing exitsting code"
 
-unzip /tmp/shipping.zip &>>Logs_file
-VALIDATE $? "Unzip Shipping"
+unzip /tmp/payment.zip &>>Logs_file
+VALIDATE $? "Unzip Payment"
 
-mvn clean package &>>Logs_file
-VALIDATE $? "Maven Package cleaning"
+pip3 install -r requirements.txt &>>Logs_file
 
-mv target/shipping-1.0.jar shipping.jar &>>Logs_file
-
-cp $SCRIPT_DIR/shipping_service /etc/systemd/system/shipping.service &>>Logs_file
+cp $SCRIPT_DIR/payment_service /etc/systemd/system/payment.service &>>Logs_file
 
 systemctl daemon-reload &>>Logs_file
 VALIDATE $? "Reloading Daemon"
+systemctl enable payment &>>Logs_file
 
-systemctl enable shipping
-
-dnf install mysql -y &>>Logs_file
-VALIDATE $? "Installing MySQL"
-
-mysql -h $MYSQL_HOST -uroot >pRoboShop@1 -e 'use cities' &>>Logs_file
-
-if [ $? -ne 0 ]; then
-    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>Logs_file
-    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql &>>Logs_file
-    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>Logs_file
-else
-    echo "Shipping data already loaded hence..... $Y SKIPPING $N"
-fi
-
-systemctl restart shipping &>>Logs_file
-VALIDATE $? "Shipping restart"
-
+systemctl restart payment &>>Logs_file
+VALIDATE $? "payment restart"
 
 End_time=$(date +%s)
 Total_time=$(($End_time - $Start_time))
