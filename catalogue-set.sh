@@ -40,7 +40,7 @@ curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue
 cd /app
 rm -rf /app/*
 unzip /tmp/catalogue.zip &>>Logs_file
-npm installll &>>Logs_file
+npm install &>>Logs_file
 cp $SCRIPT_DIR/catalogue_service /etc/systemd/system/catalogue.service
 systemctl daemon-reload
 systemctl enable catalogue
