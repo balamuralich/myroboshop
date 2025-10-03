@@ -63,11 +63,13 @@ VALIDATE $? "Downloading cart Application"
 cd /app                                             #Navigates to /app.
 VALIDATE $? "Changing to App Directory"
 
+rm -rf /app/*                                       #Clears old code.
+VALIDATE $? "Removing existing code"
+
 unzip /tmp/cart.zip &>>Logs_file               #Unzips the new code.
 VALIDATE $? "Unzip Cart"
 
-rm -rf /app/*                                       #Clears old code.
-VALIDATE $? "Removing existing code"
+cd /app
 
 npm install &>>Logs_file                            #Installs required Node.js packages from package.json.
 VALIDATE $? "Installing Dependencies"
@@ -79,7 +81,7 @@ systemctl daemon-reload                             #Reloads systemd to recogniz
 systemctl enable cart                          #Enables the service to start on boot.
 VALIDATE $? "Enabling Cart"
 
-systemctl start cart                        #Restarts the service to apply changes.
+systemctl restart cart                        #Restarts the service to apply changes.
 VALIDATE $? "Restarted cart"
 
 End_time=$(date +%s)
