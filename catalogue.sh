@@ -78,6 +78,8 @@ systemctl daemon-reload                             #Reloads systemd to recogniz
 systemctl enable catalogue                          #Enables the service to start on boot.
 VALIDATE $? "Enabling Catalogue"
 
+systemctl start catalogue
+
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo  #Adds MongoDB repo.
 VALIDATE $? "Copy Mongo repo"
 

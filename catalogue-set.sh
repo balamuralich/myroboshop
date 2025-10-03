@@ -44,6 +44,7 @@ npm install &>>Logs_file
 cp $SCRIPT_DIR/catalogue_service /etc/systemd/system/catalogue.service
 systemctl daemon-reload
 systemctl enable catalogue
+systemctl start catalogue
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 dnf install mongodb-mongosh -y &>>Logs_file
 INDEX=$(mongosh mongodb.jyobala.space --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
