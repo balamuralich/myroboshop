@@ -88,6 +88,3 @@ else
 
 systemctl restart catalogue
 VALIDATE $? "Restarted Catalogue"
-
-
-
