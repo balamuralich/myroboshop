@@ -57,7 +57,7 @@ fi
 mkdir -p /app                                       #Creates /app directory if it doesn't exist.
 VALIDATE $? "Creating app directory"
 
-curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>Logs_file  #Downloads the catalogue app zip file.
+curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>Logs_file  #Downloads the catalogue app zip file.
 VALIDATE $? "Downloading cart Application"
 
 cd /app                                             #Navigates to /app.
@@ -77,7 +77,7 @@ VALIDATE $? "Copy systemctl service"
 
 systemctl daemon-reload                             #Reloads systemd to recognize the new service.
 systemctl enable cart                          #Enables the service to start on boot.
-VALIDATE $? "Enabling User"
+VALIDATE $? "Enabling Cart"
 
 systemctl restart cart                        #Restarts the service to apply changes.
 VALIDATE $? "Restarted cart"
