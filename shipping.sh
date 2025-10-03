@@ -38,7 +38,7 @@ VALIDATE(){
             fi
 }
 
-dnf install maven -y
+dnf install maven -y &>>Logs_file
 
 id roboshop &>>Logs_file
 if [ $? -ne 0 ]; then
@@ -65,15 +65,12 @@ VALIDATE $? "Unzip Shipping"
 mvn clean package &>>Logs_file
 VALIDATE $? "Maven Package cleaning"
 
-mv target/shipping-1.0.jar shipping.jar 
+mv target/shipping-1.0.jar shipping.jar &>>Logs_file
 
-systemctl daemon-reload
+systemctl daemon-reload &>>Logs_file
 VALIDATE $? "Reloading Daemon"
 
-systemctl enable shipping &>>Logs_file
-VALIDATE $? "Shipping Enabling"
-
-systemctl start shipping
+systemctl start shipping &>>Logs_file
 VALIDATE $? "Start Shipping"
 
 dnf install mysql -y &>>Logs_file
@@ -89,7 +86,7 @@ else
     echo "Shipping data already loaded hence..... $Y SKIPPING $N"
 fi
 
-systemctl restart shipping
+systemctl restart shipping &>>Logs_file
 VALIDATE $? "Shipping restart"
 
 
