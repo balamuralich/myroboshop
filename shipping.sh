@@ -67,12 +67,12 @@ VALIDATE $? "Maven Package cleaning"
 
 mv target/shipping-1.0.jar shipping.jar &>>Logs_file
 
-cp $SCRIPT_DIR/shipping_service /etc/systemd/system/user.service 
+cp $SCRIPT_DIR/shipping_service /etc/systemd/system/shipping.service 
 
 systemctl daemon-reload &>>Logs_file
 VALIDATE $? "Reloading Daemon"
 
-systemctl enable shipping 
+systemctl enable shipping
 
 dnf install mysql -y &>>Logs_file
 VALIDATE $? "Installing MySQL"
