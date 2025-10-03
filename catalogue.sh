@@ -9,7 +9,7 @@ N1="\e[22m" #No Bold
 
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-SCRIPT_DIR="pwd"
+SCRIPT_DIR=pwd
 MONGODB_HOST=mongodb.jyobala.space
 Logs_file="$LOGS_FOLDER/$SCRIPT_NAME.log"
 
@@ -65,7 +65,7 @@ VALIDATE $? "Unzip Catalogue"
 npm install &>>Logs_file
 VALIDATE $? "Installing Dependencies"
 
-cp $SCRIPT_DIR/etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR/catalogue.service/etc/systemd/system/catalogue.service
 VALIDATE $? "Copy systemctl service"
 
 systemctl daemon-reload
