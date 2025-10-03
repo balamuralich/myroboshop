@@ -69,8 +69,6 @@ VALIDATE $? "Unzip Cart"
 rm -rf /app/*                                       #Clears old code.
 VALIDATE $? "Removing existing code"
 
-cd /app
-
 npm install &>>Logs_file                            #Installs required Node.js packages from package.json.
 VALIDATE $? "Installing Dependencies"
 
