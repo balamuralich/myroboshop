@@ -79,7 +79,7 @@ systemctl daemon-reload                             #Reloads systemd to recogniz
 systemctl enable cart                          #Enables the service to start on boot.
 VALIDATE $? "Enabling Cart"
 
-systemctl restart cart                        #Restarts the service to apply changes.
+systemctl start cart                        #Restarts the service to apply changes.
 VALIDATE $? "Restarted cart"
 
 End_time=$(date +%s)
