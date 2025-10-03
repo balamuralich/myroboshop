@@ -57,7 +57,7 @@ fi
 mkdir -p /app                                       #Creates /app directory if it doesn't exist.
 VALIDATE $? "Creating app directory"
 
-curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>Logs_file  #Downloads the catalogue app zip file.
+curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>Logs_file  #Downloads the catalogue app zip file.
 VALIDATE $? "Downloading cart Application"
 
 cd /app                                             #Navigates to /app.
