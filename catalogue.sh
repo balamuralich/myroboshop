@@ -69,7 +69,7 @@ cp $SCRIPT_DIR/catalogue_service /etc/systemd/system/catalogue_service
 VALIDATE $? "Copy systemctl service"
 
 systemctl daemon-reload
-systemctl enable catalogue &>>Logs_file
+systemctl enable catalogue
 VALIDATE $? "Enabling Catalogue"
 
 cp $SCRIPT_DIR/etc/yum.repos.d/mongo.repo
