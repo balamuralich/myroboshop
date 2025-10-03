@@ -15,6 +15,7 @@ SCRIPT_DIR=$PWD                             #Current working directory.
 MONGODB_HOST=mongodb.jyobala.space          #MongoDB hostname.
 Logs_file="$LOGS_FOLDER/$SCRIPT_NAME.log"   #Full path to the log file for this script.
 Start_time=$(date +%s)
+MYSQL_HOST=mysql.jyobala.space
 
 mkdir -p $LOGS_FOLDER                       #Ensures the log directory exists.
 
@@ -37,16 +38,9 @@ VALIDATE(){
             fi
 }
 
-dnf module disable nodejs -y &>>Logs_file           #Disables any existing Node.js module.
-VALIDATE $? "Disabling NodeJS"                      
+dnf install maven -y
 
-dnf module enable nodejs:20 -y &>>Logs_file         #Enables Node.js version 20.
-VALIDATE $? "Enabling NodeJS:20"
-
-dnf install nodejs -y &>>Logs_file                  #Installs Node.js..
-VALIDATE $? "Installing NodeJS"
-
-id roboshop &>>Logs_file                            #Checks if roboshop user exists. If not, creates a system user with no login shell and /app as home.
+id roboshop &>>Logs_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>Logs_file
     VALIDATE $? "Creating System User"
@@ -54,33 +48,50 @@ else
     echo -e "User already exist .... hence, $Y SKIPPING $N"
 fi
 
-mkdir -p /app                                       #Creates /app directory if it doesn't exist.
-VALIDATE $? "Creating app directory"
+mkdir /app
 
-curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>Logs_file  #Downloads the catalogue app zip file.
-VALIDATE $? "Downloading user Application"
+curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>Logs_file
+VALIDATE $? "Downloading Shipping Application"
 
-cd /app                                             #Navigates to /app.
-VALIDATE $? "Changing to App Directory"
+cd /app
+VALIDATE $? "Creating App Directory"
 
-rm -rf /app/*                                       #Clears old code.
-VALIDATE $? "Removing existing code"
+rm -rf /app/*
+VALIDATE $? "Removing exitsting code"
 
-unzip /tmp/cart.zip &>>Logs_file               #Unzips the new code.
-VALIDATE $? "Unzip Cart"
+unzip /tmp/shipping.zip &>>Logs_file
+VALIDATE $? "Unzip Shipping"
 
-npm install &>>Logs_file                            #Installs required Node.js packages from package.json.
-VALIDATE $? "Installing Dependencies"
+mvn clean package &>>Logs_file
+VALIDATE $? "Maven Package cleaning"
 
-cp $SCRIPT_DIR/cart_service /etc/systemd/system/cart.service &>>Logs_file #Copies the service file to systemd.
-VALIDATE $? "Copy systemctl service"
+mv target/shipping-1.0.jar shipping.jar 
 
-systemctl daemon-reload                             #Reloads systemd to recognize the new service.
-systemctl enable cart                          #Enables the service to start on boot.
-VALIDATE $? "Enabling User"
+systemctl daemon-reload
+VALIDATE $? "Reloading Daemon"
 
-systemctl restart cart                        #Restarts the service to apply changes.
-VALIDATE $? "Restarted cart"
+systemctl enable shipping &>>Logs_file
+VALIDATE $? "Shipping Enabling"
+
+systemctl start shipping
+VALIDATE $? "Start Shipping"
+
+dnf install mysql -y &>>Logs_file
+VALIDATE $? "Installing MySQL"
+
+mysql -h $MYSQL_HOST -uroot >pRoboShop@1 -e 'use cities' &>>Logs_file
+
+if [ $? -ne 0 ]; then
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>Logs_file
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql &>>Logs_file
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>Logs_file
+else
+    echo "Shipping data already loaded hence..... $Y SKIPPING $N"
+fi
+
+systemctl restart shipping
+VALIDATE $? "Shipping restart"
+
 
 End_time=$(date +%s)
 Total_time=$(($End_time - $Start_time))
