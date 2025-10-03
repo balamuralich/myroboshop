@@ -63,11 +63,13 @@ VALIDATE $? "Downloading cart Application"
 cd /app                                             #Navigates to /app.
 VALIDATE $? "Changing to App Directory"
 
+unzip /tmp/cart.zip &>>Logs_file               #Unzips the new code.
+VALIDATE $? "Unzip Cart"
+
 rm -rf /app/*                                       #Clears old code.
 VALIDATE $? "Removing existing code"
 
-unzip /tmp/cart.zip &>>Logs_file               #Unzips the new code.
-VALIDATE $? "Unzip Cart"
+cd /app
 
 npm install &>>Logs_file                            #Installs required Node.js packages from package.json.
 VALIDATE $? "Installing Dependencies"
