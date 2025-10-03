@@ -72,7 +72,7 @@ VALIDATE $? "Unzip Cart"
 npm install &>>Logs_file                            #Installs required Node.js packages from package.json.
 VALIDATE $? "Installing Dependencies"
 
-cp $SCRIPT_DIR/cart.service /etc/systemd/system/cart.service &>>Logs_file #Copies the service file to systemd.
+cp $SCRIPT_DIR/cart_service /etc/systemd/system/cart.service &>>Logs_file #Copies the service file to systemd.
 VALIDATE $? "Copy systemctl service"
 
 systemctl daemon-reload                             #Reloads systemd to recognize the new service.
